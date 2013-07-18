@@ -33,7 +33,7 @@ namespace SWParse.LogProcessors
                 }
             }
 
-            switch (record.Effect.Effect)
+            switch (record.Effect.Name)
             {
                 case LogEffect.EnterCombatString:
                     CombatStart = DateTime.Now;

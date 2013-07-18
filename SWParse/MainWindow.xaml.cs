@@ -78,14 +78,22 @@ namespace SWParse
             battle.Visit(summaryVisitor,healVisitor,damageVisitor);
 
             LogText.IsEnabled = true;
-            LogText.Document = CreateSummaryDocument(summaryVisitor.Summary);
-            LogHeal.Document = CreateSummaryDocument(healVisitor.Summary);
-            LogDamageDealt.Document = CreateSummaryDocument(damageVisitor.Summary);
-        }
-
-        private FlowDocument CreateSummaryDocument(string text)
-        {
-            return new FlowDocument(new Paragraph(new Run(text)));
+//<<<<<<< HEAD
+//            LogText.Document = CreateSummaryDocument(summaryVisitor.Summary);
+//            LogHeal.Document = CreateSummaryDocument(healVisitor.Summary);
+//            LogDamageDealt.Document = CreateSummaryDocument(damageVisitor.Summary);
+//        }
+//
+//        private FlowDocument CreateSummaryDocument(string text)
+//        {
+//            return new FlowDocument(new Paragraph(new Run(text)));
+//=======
+            LogText.Document = new FlowDocument(new Paragraph(new Run(battle.GetBattleLog())));
+            LogHeal.Document = new FlowDocument(new Paragraph(new Run(battle.GetHealLog())));
+            LogDamageDealt.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageLog())));
+            LogDamageTaken.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageTakenLog())));
+            LogThreat.Document = new FlowDocument(new Paragraph(new Run(battle.GetThreatLog())));
+//>>>>>>> 78b55090b6753975dd373df6d5870d64839a9a99
         }
     }
 }

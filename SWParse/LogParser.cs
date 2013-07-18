@@ -22,11 +22,11 @@ namespace SWParse
             var battles = new List<LogBattle>();
             LogBattle currentBattle = null;
             bool guarded = false;
-            IEnumerable<LogRecord> heals = log.Where(rec => rec.Source.Name == logOwner && rec.Effect.Effect == LogEffect.HealString);
+            IEnumerable<LogRecord> heals = log.Where(rec => rec.Source.Name == logOwner && rec.Effect.Name == LogEffect.HealString);
             double healMultiplier = heals.Any()
                                         ? heals.Max(rec =>
                                             {
-                                                var d = ((double) rec.Threat*2/(guarded ? 0.75 : 1))/
+                                                var d = ((double) rec.Threat*2/(rec.Guarded ? 0.75 : 1))/
                                                         rec.Quantity.Value;
                                                 return d < 0.95 ? d : 0;
                                             })
@@ -35,7 +35,7 @@ namespace SWParse
             for (var i=0; i < log.Count; i++)            
             {
                 var record = log[i];
-                switch (record.Effect.Effect)
+                switch (record.Effect.Name)
                 {
                     case LogEffect.GuardString:
                         {
@@ -76,7 +76,7 @@ namespace SWParse
                         if (currentBattle != null)
                         {
                             record.Guarded = guarded;
-                            record.HealThreadMultiplier = healMultiplier;
+                            record.HealThreatMultiplier = healMultiplier;
                             currentBattle.Add(record);
                         }
                         break;

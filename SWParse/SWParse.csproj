@@ -69,6 +69,10 @@
     <Compile Include="LogProcessors\IBaseProcessor.cs" />
     <Compile Include="LogProcessors\DamageProcessor.cs" />
     <Compile Include="LogStructure\LogBattle.cs" />
+    <Compile Include="LogStructure\Extensions.cs" />    
+    <Compile Include="LogStructure\LogBattle.DamageDealt.cs" />
+    <Compile Include="LogStructure\LogBattle.DamageTaken.cs" />
+    <Compile Include="LogStructure\LogBattle.Threat.cs" />
     <Compile Include="LogStructure\LogEffect.cs" />
     <Compile Include="LogStructure\LogPerson.cs" />
     <Compile Include="LogStructure\LogQuantity.cs" />
@@ -97,6 +101,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+
+    <Compile Include="LogStructure\LogBattle.Healing.cs" />
+    <Compile Include="LogStructure\LogBattle.Reports.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,7 +113,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

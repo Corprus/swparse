@@ -56,7 +56,7 @@ namespace SWParse.LogProcessors
 
         protected override void ContinueProcessRecord(LogRecord record)
         {
-            if (record.Source.Name == Owner && record.Effect.Effect == LogEffect.DamageString)
+            if (record.Source.Name == Owner && record.Effect.Name == LogEffect.DamageString)
             {
                 RecordDamage(record);
 
