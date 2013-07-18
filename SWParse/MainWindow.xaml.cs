@@ -65,6 +65,8 @@ namespace SWParse
             LogText.Document = new FlowDocument(new Paragraph(new Run(battle.GetBattleLog())));
             LogHeal.Document = new FlowDocument(new Paragraph(new Run(battle.GetHealLog())));
             LogDamageDealt.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageLog())));
+            LogDamageTaken.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageTakenLog())));
+            LogThreat.Document = new FlowDocument(new Paragraph(new Run(battle.GetThreatLog())));
         }
     }
 }

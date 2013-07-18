@@ -62,7 +62,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="LogParser.cs" />
+    <Compile Include="LogStructure\Extensions.cs" />
     <Compile Include="LogStructure\LogBattle.cs" />
+    <Compile Include="LogStructure\LogBattle.DamageDealt.cs" />
+    <Compile Include="LogStructure\LogBattle.DamageTaken.cs" />
+    <Compile Include="LogStructure\LogBattle.Threat.cs" />
     <Compile Include="LogStructure\LogEffect.cs" />
     <Compile Include="LogStructure\LogPerson.cs" />
     <Compile Include="LogStructure\LogQuantity.cs" />
@@ -91,6 +95,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Compile Include="LogStructure\LogBattle.Healing.cs" />
+    <Compile Include="LogStructure\LogBattle.Reports.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
