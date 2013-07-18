@@ -18,16 +18,16 @@ namespace SWParse
 
         public static List<LogBattle> DivideIntoBattlesAndApplyGuards(List<LogRecord> log)
         {
-            string logOwner = log.Find(rec => rec.Effect.Type == LogEffectType.Event).Source.Name;
+            string logOwner = log.First(rec => rec.Effect.Type == LogEffectType.Event).Source.Name;
             var battles = new List<LogBattle>();
             LogBattle currentBattle = null;
             bool guarded = false;
-            IEnumerable<LogRecord> heals = log.Where(rec => rec.Source.Name == logOwner && rec.Effect.Effect == LogEffect.HealString);
+            IEnumerable<LogRecord> heals = log.Where(rec => rec.Source.Name == logOwner && rec.Effect.Name == LogEffect.HealString);
             double healMultiplier = heals.Any()
                                         ? heals.Max(rec =>
                                             {
                                                 var d = ((double) rec.Threat*2/(rec.Guarded ? 0.75 : 1))/
-                                                        rec.Quantity.Quantity;
+                                                        rec.Quantity.Value;
                                                 return d < 0.95 ? d : 0;
                                             })
                                         : 1;
@@ -35,7 +35,7 @@ namespace SWParse
             for (var i=0; i < log.Count; i++)            
             {
                 var record = log[i];
-                switch (record.Effect.Effect)
+                switch (record.Effect.Name)
                 {
                     case LogEffect.GuardString:
                         {
@@ -70,9 +70,7 @@ namespace SWParse
                         }
                         break;
                     case LogEffect.EnterCombatString:
-                        currentBattle = new LogBattle();                        
-                        currentBattle.LogOwner = logOwner;
-                        currentBattle.Add(record);
+                        currentBattle = new LogBattle(logOwner) {record};
                         break;
                     default:
                         if (currentBattle != null)

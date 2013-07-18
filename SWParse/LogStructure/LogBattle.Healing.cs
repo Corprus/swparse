@@ -7,7 +7,7 @@ namespace SWParse.LogStructure
     {
         private IEnumerable<LogRecord> HealsGivenRecords
         {
-            get { return this.Where(rec => rec.Source.Name == LogOwner && rec.Effect.Effect == LogEffect.HealString); }
+            get { return this.Where(rec => rec.Source.Name == LogOwner && rec.Effect.Name == LogEffect.HealString); }
         }
 
         private IEnumerable<LogRecord> CritHealsGivenRecords
@@ -35,8 +35,8 @@ namespace SWParse.LogStructure
             get
             {
                 return
-                    this.Where(rec => rec.Target.Name == LogOwner && rec.Effect.Effect == LogEffect.HealString)
-                        .Sum(rec => rec.Quantity.Quantity);
+                    this.Where(rec => rec.Target.Name == LogOwner && rec.Effect.Name == LogEffect.HealString)
+                        .Sum(rec => rec.Quantity.Value);
             }
         }
 
@@ -50,10 +50,10 @@ namespace SWParse.LogStructure
             get
             {
                 return
-                    (long)this.Where(rec => rec.Source.Name == LogOwner && rec.Effect.Effect == LogEffect.HealString)
+                    (long)this.Where(rec => rec.Source.Name == LogOwner && rec.Effect.Name == LogEffect.HealString)
                                .Sum(
                                    rec =>
-                                   rec.Quantity.Quantity -
+                                   rec.Quantity.Value -
                                    (rec.Threat * 2 / (rec.HealThreatMultiplier * (rec.Guarded ? 0.75 : 1))));
             }
         }
@@ -75,14 +75,14 @@ namespace SWParse.LogStructure
 
         public long HealsGiven
         {
-            get { return HealsGivenRecords.Sum(rec => rec.Quantity.Quantity); }
+            get { return HealsGivenRecords.Sum(rec => rec.Quantity.Value); }
         }
 
         public long NormalHeals
         {
             get
             {
-                return HealsGivenRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Quantity);
+                return HealsGivenRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value);
             }
         }
 
@@ -90,7 +90,7 @@ namespace SWParse.LogStructure
         {
             get
             {
-                return CritHealsGivenRecords.Sum(rec => rec.Quantity.Quantity);
+                return CritHealsGivenRecords.Sum(rec => rec.Quantity.Value);
             }
         }
     }

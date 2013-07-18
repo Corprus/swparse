@@ -61,9 +61,15 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogBattleVisitors\DamageVisitor.cs" />
+    <Compile Include="LogBattleVisitors\HealVisitor.cs" />
+    <Compile Include="LogBattleVisitors\IBattleLogVisitor.cs" />
+    <Compile Include="LogBattleVisitors\SummaryVisitor.cs" />
     <Compile Include="LogParser.cs" />
-    <Compile Include="LogStructure\Extensions.cs" />
+    <Compile Include="LogProcessors\IBaseProcessor.cs" />
+    <Compile Include="LogProcessors\DamageProcessor.cs" />
     <Compile Include="LogStructure\LogBattle.cs" />
+    <Compile Include="LogStructure\Extensions.cs" />    
     <Compile Include="LogStructure\LogBattle.DamageDealt.cs" />
     <Compile Include="LogStructure\LogBattle.DamageTaken.cs" />
     <Compile Include="LogStructure\LogBattle.Threat.cs" />
@@ -95,6 +101,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+
     <Compile Include="LogStructure\LogBattle.Healing.cs" />
     <Compile Include="LogStructure\LogBattle.Reports.cs" />
     <None Include="Properties\Settings.settings">

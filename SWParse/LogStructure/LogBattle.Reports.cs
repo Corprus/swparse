@@ -17,8 +17,8 @@ namespace SWParse.LogStructure
                 {
                     string.Format("Combat {0:T} - {1:T}", Start, End),
                     string.Format("Duration: {0}", Duration.ToCombatLengthFormat()),
-                    string.Format("Enter: {0}", Enter.Effect.Effect),
-                    string.Format("Exit: {0}", Exit.Effect.Effect),
+                    string.Format("Enter: {0}", Enter.Effect.Name),
+                    string.Format("Exit: {0}", Exit.Effect.Name),
                     string.Format("Damage: {0}", Damage),
                     string.Format("Heals Given: {0}", HealsGiven),
                     string.Format("DPS: {0:0.##}", DPS),

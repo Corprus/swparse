@@ -1,12 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SWParse.LogBattleVisitors;
 
 namespace SWParse.LogStructure
 {
     internal partial class LogBattle : List<LogRecord>
     {
-        public string LogOwner { get; set; }
+        public LogBattle(string logOwner)
+        {
+            LogOwner = logOwner;
+        }
+
+        private string LogOwner { get; set; }
 
         public DateTime Start
         {
@@ -33,10 +39,20 @@ namespace SWParse.LogStructure
             get { return this[Count - 1]; }
         }
 
+        public void Visit(params IBattleLogVisitor[] visitors)
+        {
+            foreach (var battleLogVisitor in visitors)
+            {
+                battleLogVisitor.Apply(this);
+            }
+            
+        }
+
         public override string ToString()
         {
             return string.Format("{0:T} - {1:T} ({2})", Start, End, Duration.ToCombatLengthFormat());
         } 
+
 
     }
 }

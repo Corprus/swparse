@@ -27,13 +27,13 @@ namespace SWParse.LogStructure
 
         public LogEffectType Type;
         public long? TypeId;
-        public string Effect;
+        public string Name;
         public long? EffectId;
         public LogEffect(string logString)
         {
             Type = LogEffectType.Event;
             TypeId = null;
-            Effect = string.Empty;
+            Name = string.Empty;
             EffectId = null;
             if (logString != string.Empty)
             {
@@ -50,7 +50,7 @@ namespace SWParse.LogStructure
                 {
                     TypeId = typeId;
                 }
-                Effect = parsedEffect[2];
+                Name = parsedEffect[2];
                 long effectId;
                 if (long.TryParse(parsedEffect[3], out effectId))
                 {

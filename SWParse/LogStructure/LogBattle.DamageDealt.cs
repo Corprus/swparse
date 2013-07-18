@@ -7,7 +7,7 @@ namespace SWParse.LogStructure
     {
         private IEnumerable<LogRecord> DamageDealtRecords
         {
-            get { return this.Where(rec => rec.Source.Name == LogOwner && rec.Target.Name != LogOwner && rec.Effect.Effect == LogEffect.DamageString); }
+            get { return this.Where(rec => rec.Source.Name == LogOwner && rec.Target.Name != LogOwner && rec.Effect.Name == LogEffect.DamageString); }
         }
 
         private IEnumerable<LogRecord>  CritDamageDealtRecords
@@ -22,14 +22,14 @@ namespace SWParse.LogStructure
 
         public long Damage
         {
-            get { return DamageDealtRecords.Sum(rec => rec.Quantity.Quantity); }
+            get { return DamageDealtRecords.Sum(rec => rec.Quantity.Value); }
         }
 
         public long CritDamage
         {
             get
             {
-                return CritDamageTakenRecords.Sum(rec => rec.Quantity.Quantity);
+                return CritDamageTakenRecords.Sum(rec => rec.Quantity.Value);
             }
         }
 
@@ -42,7 +42,7 @@ namespace SWParse.LogStructure
         {
             get
             {
-                return DamageDealtRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Quantity);
+                return DamageDealtRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value);
             }
         }
 
