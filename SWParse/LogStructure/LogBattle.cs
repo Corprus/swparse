@@ -12,15 +12,15 @@ namespace SWParse.LogStructure
 
         public DateTime Start
         {
-            get { return this.Enter.When; }
+            get { return Enter.When; }
         }
         public DateTime End
         {
-            get { return this.Exit.When; }
+            get { return Exit.When; }
         }
         public TimeSpan Duration
         {
-            get { return this.End - this.Start; }
+            get { return End - Start; }
         }
         public LogRecord Enter
         {
@@ -28,7 +28,7 @@ namespace SWParse.LogStructure
         }
         public LogRecord Exit
         {
-            get { return this[this.Count - 1]; }
+            get { return this[Count - 1]; }
         }
 
         public long Damage
@@ -97,7 +97,7 @@ namespace SWParse.LogStructure
 
         public double CritHealsPercent
         {
-            get { return (double)(HealsGiven != 0 ? (double)CritHeals / (double)HealsGiven : 0); }
+            get { return HealsGiven != 0 ? (double)CritHeals / (double)HealsGiven : 0; }
         }
 
         public long HealsTaken
@@ -131,8 +131,14 @@ namespace SWParse.LogStructure
 
         public double EffectiveHealsPercent
         {
-            get { return (double)(HealsGiven != 0 ? (double)EffectiveHeal / (double)HealsGiven : 0); }
+            get { return HealsGiven != 0 ? (double)EffectiveHeal / (double)HealsGiven : 0; }
         }
+
+        public override string ToString()
+        {
+            return string.Format("{0:T} - {1:T} ({2:g})", Start, End, Duration);
+        }
+
 
 
     }

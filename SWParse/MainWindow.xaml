@@ -1,16 +1,47 @@
 ﻿<Window x:Class="SWParse.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="MainWindow" Height="350" Width="652.2">
-    <DockPanel Margin="17,10,3.4,11.4" RenderTransformOrigin="0.5,0.5">
+        Title="MainWindow" Height="858.546" Width="930.411">
+    <DockPanel Margin="10,10,3.4,11.4" RenderTransformOrigin="0.5,0.5">
         <Button Content="Parse Log" HorizontalAlignment="Left" Margin="10,0,0,0" Width="75" Click="Button_Click_1" Height="22" DockPanel.Dock="Top" />
-        <RichTextBox x:Name="logText" Width="604" Margin="0,4.6,0,-0.2">
-            <FlowDocument>
-                <Paragraph>
-                    <Run Text="RichTextBox"/>
-                </Paragraph>
-            </FlowDocument>
-        </RichTextBox>
+        <ListBox x:Name="ListBattles" Margin="10,9.6,10,9.8" RenderTransformOrigin="0.489,0.494" HorizontalAlignment="Left" SelectionChanged="ListBattles_SelectionChanged" Width="214"/>
+        <TabControl x:Name="LogTab" Margin="0,-12.4,0,-0.2">
+            <TabItem Header="Battle Log" HorizontalAlignment="Left" Margin="-2,-2,-1.8,-1">
+                <Grid Background="#FFE5E5E5">
+                    <RichTextBox x:Name="LogText" Margin="10,9.6,10,9.8" DockPanel.Dock="Right">
+                        <FlowDocument/>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="LogDamageDealt" Header="Damage Dealt" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Margin="-2,0">
+                <Grid Background="#FFE5E5E5">
+                    <RichTextBox x:Name="LogText_Copy" Margin="10,9.6,9.2,9" Grid.ColumnSpan="2">
+                        <FlowDocument/>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Heal" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Margin="-2,0">
+                <Grid Background="#FFE5E5E5">
+                    <RichTextBox x:Name="LogHeal" Margin="10,9.6,9.2,9">
+                        <FlowDocument/>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="LogDamageTaken" Header="Damage Taken" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Margin="-2,0">
+                <Grid Background="#FFE5E5E5">
+                    <RichTextBox x:Name="LogText_Copy2" Margin="10,9.6,9.2,9">
+                        <FlowDocument/>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="LogThreat" Header="Threat" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Margin="-2,0">
+                <Grid Background="#FFE5E5E5">
+                    <RichTextBox x:Name="LogText_Copy3" Margin="10,10,9.2,8.4" Grid.ColumnSpan="2">
+                        <FlowDocument/>
+                    </RichTextBox>
+                </Grid>
+            </TabItem>
+        </TabControl>
     </DockPanel>
 
 </Window>
