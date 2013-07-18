@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWParse.LogStructure
 {
-    public struct LogRecord
+    public class LogRecord
     {
         public DateTime When;
         public LogPerson Source;

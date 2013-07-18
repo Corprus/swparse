@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SWParse.LogStructure
 {
-    public struct LogPerson
+    public class LogPerson
     {
         public string Name;
         public bool IsPlayer;
@@ -20,7 +20,7 @@ namespace SWParse.LogStructure
             Id2 = null;
             if (logString.Length > 0)
             {                
-                if (logString[0] == '@')
+                if (logString.StartsWith("@"))
                 {
                     IsPlayer = true;
                     Name = logString.Substring(1);
@@ -28,7 +28,7 @@ namespace SWParse.LogStructure
                 }
                 var parsedName = LogParser.ParseString(@"^(?<name>.*?) \{(?<id1>\d*?)\}:(?<id2>\d*?)$", logString);
                 Name = parsedName[0];
-                IsPlayer = false;
+
                 long id1;
                 if (long.TryParse(parsedName[1], out id1))
                 {

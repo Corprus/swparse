@@ -61,6 +61,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LogBattleVisitors\DamageVisitor.cs" />
+    <Compile Include="LogBattleVisitors\HealVisitor.cs" />
+    <Compile Include="LogBattleVisitors\IBattleLogVisitor.cs" />
+    <Compile Include="LogBattleVisitors\SummaryVisitor.cs" />
     <Compile Include="LogParser.cs" />
     <Compile Include="LogStructure\LogBattle.cs" />
     <Compile Include="LogStructure\LogEffect.cs" />
