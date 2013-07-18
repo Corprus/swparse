@@ -1,12 +1,7 @@
 ﻿using System.Collections.Generic;
-
-using System.Windows.Media;
-
 using System.IO;
 
 using Microsoft.Win32;
-using System;
-using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using SWParse.LogBattleVisitors;
@@ -83,12 +78,12 @@ namespace SWParse
             battle.Visit(summaryVisitor,healVisitor,damageVisitor);
 
             LogText.IsEnabled = true;
-            LogText.Document = new FlowDocument(new Paragraph(new Run(battle.GetBattleLog())));
-            LogHeal.Document = new FlowDocument(new Paragraph(new Run(battle.GetHealLog())));
-            LogDamageDealt.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageLog())));
-            LogDamageTaken.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageTakenLog())));
-            LogThreat.Document = new FlowDocument(new Paragraph(new Run(battle.GetThreatLog())));
-            LogThreat.Document.Blocks.Add(battle.GetThreatTable());
+            LogText.Document = new FlowDocument(new Paragraph(new Run(summaryVisitor.Summary)));
+            LogHeal.Document = new FlowDocument(new Paragraph(new Run(healVisitor.Summary)));
+            LogDamageDealt.Document = new FlowDocument(new Paragraph(new Run(damageVisitor.Summary)));
+            LogDamageTaken.Document = new FlowDocument(new Paragraph(new Run(battle.Statistics.DamageTaken.GetLog())));
+            LogThreat.Document = new FlowDocument(new Paragraph(new Run(battle.Statistics.Threat.GetLog())));
+            LogThreat.Document.Blocks.Add(battle.Statistics.Threat.GetThreatTable());
 
         }
     }

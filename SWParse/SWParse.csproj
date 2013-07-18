@@ -69,15 +69,18 @@
     <Compile Include="LogProcessors\IBaseProcessor.cs" />
     <Compile Include="LogProcessors\DamageProcessor.cs" />
     <Compile Include="LogStructure\LogBattle.cs" />
-    <Compile Include="LogStructure\Extensions.cs" />    
-    <Compile Include="LogStructure\LogBattle.DamageDealt.cs" />
-    <Compile Include="LogStructure\LogBattle.DamageTaken.cs" />
-    <Compile Include="LogStructure\LogBattle.Threat.cs" />
+    <Compile Include="LogStructure\Extensions.cs" />
     <Compile Include="LogStructure\LogEffect.cs" />
     <Compile Include="LogStructure\LogPerson.cs" />
     <Compile Include="LogStructure\LogQuantity.cs" />
     <Compile Include="LogStructure\LogRecord.cs" />
     <Compile Include="LogStructure\LogSkill.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\BattleCalculator.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\Calculator.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\DamageCalculator.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\DamageTakenCalculator.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\HealCalculator.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\ThreatCalculator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -101,8 +104,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-
-    <Compile Include="LogStructure\LogBattle.Healing.cs" />
     <Compile Include="LogStructure\LogBattle.Reports.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

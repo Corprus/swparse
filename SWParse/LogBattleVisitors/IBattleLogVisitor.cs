@@ -4,6 +4,6 @@ namespace SWParse.LogBattleVisitors
 {
     internal interface IBattleLogVisitor
     {
-        void Apply(LogBattle logBattle);
+        void Apply(LogStructure.StatisticsCalculation.BattleCalculator logBattle);
     }
 }
