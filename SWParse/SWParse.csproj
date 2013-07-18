@@ -66,6 +66,8 @@
     <Compile Include="LogBattleVisitors\IBattleLogVisitor.cs" />
     <Compile Include="LogBattleVisitors\SummaryVisitor.cs" />
     <Compile Include="LogParser.cs" />
+    <Compile Include="LogProcessors\IBaseProcessor.cs" />
+    <Compile Include="LogProcessors\DamageProcessor.cs" />
     <Compile Include="LogStructure\LogBattle.cs" />
     <Compile Include="LogStructure\LogEffect.cs" />
     <Compile Include="LogStructure\LogPerson.cs" />
@@ -104,6 +106,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

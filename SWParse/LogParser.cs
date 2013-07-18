@@ -18,7 +18,7 @@ namespace SWParse
 
         public static List<LogBattle> DivideIntoBattlesAndApplyGuards(List<LogRecord> log)
         {
-            string logOwner = log.Single(rec => rec.Effect.Type == LogEffectType.Event).Source.Name;
+            string logOwner = log.First(rec => rec.Effect.Type == LogEffectType.Event).Source.Name;
             var battles = new List<LogBattle>();
             LogBattle currentBattle = null;
             bool guarded = false;
