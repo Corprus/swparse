@@ -62,31 +62,9 @@ namespace SWParse
                 return;
             }
             LogText.IsEnabled = true;
-            var parseDoc = new FlowDocument();
-            var par = new Paragraph(new Run(string.Format("Total combats: {0}", _battles.Count)))
-            {
-                Margin = new Thickness(0)
-            };
-//            parseDoc.Blocks.Add(new Paragraph(new Run(string.Format("Total combats: {0}", _battles.Count))));
-
-            string text = string.Format("Combat {0:T} - {1:T}, duration {2:g}, enter: {3}, exit: {4}", battle.Start, battle.End, battle.Duration, battle.Enter.Effect.Effect, battle.Exit.Effect.Effect);
-            text += string.Format(Environment.NewLine + "Damage: {0}", battle.Damage);
-            text += string.Format(Environment.NewLine + "DPS: {0:0.##}", battle.DPS);
-            text += string.Format(Environment.NewLine + "Crit Damage: {0}", battle.CritDamage);
-            text += string.Format(Environment.NewLine + "Crit Damage %: {0: 0.##}", battle.CritDamagePercent * 100);
-            text += string.Format(Environment.NewLine + Environment.NewLine + "Heals Given: {0}", battle.HealsGiven);
-            text += string.Format(Environment.NewLine + "Overheal: {0}", battle.Overheal);
-            text += string.Format(Environment.NewLine + "Normal Heal: {0}", battle.NormalHeals);
-            text += string.Format(Environment.NewLine + "Crit Heal: {0}", battle.CritHeals);
-            text += string.Format(Environment.NewLine + "Crit Heals %: {0:0.##}%", battle.CritHealsPercent * 100);
-
-            text += string.Format(Environment.NewLine + "HPS: {0:0.##}", battle.HPS);
-            text += string.Format(Environment.NewLine + "EHPS: {0:0.##}", battle.EHPS);
-            text += string.Format(Environment.NewLine + "Effective healing%: {0:0.##}%", battle.EffectiveHealsPercent * 100);
-            var battleParagraph = new Paragraph(new Run(text));
-            par.Margin = new Thickness(0);
-            parseDoc.Blocks.Add(battleParagraph);
-            LogText.Document = parseDoc;
+            LogText.Document = new FlowDocument(new Paragraph(new Run(battle.GetBattleLog())));
+            LogHeal.Document = new FlowDocument(new Paragraph(new Run(battle.GetHealLog())));
+            LogDamageDealt.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageLog())));
         }
     }
 }
