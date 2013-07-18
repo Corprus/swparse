@@ -1,8 +1,14 @@
 ﻿<Application x:Class="SWParse.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:doc="clr-namespace:System.Windows.Documents;assembly=PresentationFramework"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+            <Style TargetType="doc:TableCell" >
+                <Setter Property="BorderBrush" Value="Black" />
+                <Setter Property="BorderThickness" Value="1,1,1,1" />
+                <Setter Property="FontSize" Value="12" />
+                <Setter Property="Padding" Value="0" />
+            </Style>
     </Application.Resources>
 </Application>

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Windows.Media;
 using Microsoft.Win32;
 using System;
+using System.Linq;
 using System.Windows;
 using System.Windows.Documents;
 using SWParse.LogStructure;
@@ -67,6 +69,7 @@ namespace SWParse
             LogDamageDealt.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageLog())));
             LogDamageTaken.Document = new FlowDocument(new Paragraph(new Run(battle.GetDamageTakenLog())));
             LogThreat.Document = new FlowDocument(new Paragraph(new Run(battle.GetThreatLog())));
+            LogThreat.Document.Blocks.Add(battle.GetThreatTable());
         }
     }
 }

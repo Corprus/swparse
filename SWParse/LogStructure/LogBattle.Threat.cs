@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SWParse.LogStructure
 {
@@ -11,6 +8,11 @@ namespace SWParse.LogStructure
         private IEnumerable<LogRecord> ThreatRecords
         {
             get { return this.Where(rec => rec.Source.Name == LogOwner && rec.Threat != 0); }
+        }
+
+        public IEnumerable<IGrouping<string, LogRecord>> ThreatRecordsBySkill
+        {
+            get { return ThreatRecords.ToLookup(record => record.Skill.Name); }
         }
 
         public int ThreatActionsCount
@@ -27,10 +29,7 @@ namespace SWParse.LogStructure
         {
             get
             {
-                return (ThreatRecords.ToLookup(record => record.Skill.Name)).ToDictionary(records => records.Key,
-                                                                                          records =>
-                                                                                          records.Sum(
-                                                                                              record => record.Threat));
+                return ThreatRecordsBySkill.ToDictionary(records => records.Key, records => records.Sum(record => record.Threat));
             }
         }
     }

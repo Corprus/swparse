@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace SWParse.LogStructure
 {
@@ -73,23 +76,52 @@ namespace SWParse.LogStructure
             return text;
         }
 
-        private IEnumerable<string> GetThreatSkillDictionaryText()
-        {
-            return ThreatBySkill.OrderByDescending(pair => pair.Value).Select(pair => string.Format("{0}: {1}", pair.Key, pair.Value));
-        }
-
         public string GetThreatLog()
         {
             var text = string.Join(Environment.NewLine, new string[]
                 {
                     string.Format("Threat actions: {0}", ThreatActionsCount),
                     string.Format("TotalThreat: {0}", TotalThreat),
-                    Environment.NewLine, "Threat by skill:",
-                    string.Join(Environment.NewLine, GetThreatSkillDictionaryText())
                 });
 
             return text;
         }
+
+        public Table GetThreatTable()
+        {
+            var threatTable = new Table();
+            threatTable.CellSpacing = 0;
+            threatTable.Columns.Add(new TableColumn());
+            threatTable.Columns.Add(new TableColumn());
+            threatTable.Columns.Add(new TableColumn());
+            threatTable.Columns.Add(new TableColumn());
+            var headerGroup = new TableRowGroup();
+            headerGroup.Rows.Add(new TableRow());
+            headerGroup.Rows[0].FontWeight = FontWeights.Bold;
+            var headerRow = headerGroup.Rows[0];
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Skill"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Count"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Threat"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Threat %"))));
+            threatTable.RowGroups.Add(headerGroup);
+
+            var rowGroup = new TableRowGroup();
+            var totalThreat = TotalThreat;
+            foreach (var item in ThreatRecordsBySkill.OrderByDescending(records => records.Sum(record => record.Threat)))
+            {
+                var row = new TableRow();
+
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Key))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Count().ToString()))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Sum(record => record.Threat).ToString()))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Sum(record => (double) record.Threat / totalThreat).ToString("0.##%")))));
+                rowGroup.Rows.Add(row);
+            }
+            rowGroup.Rows.Add(new TableRow());
+            threatTable.RowGroups.Add(rowGroup);
+            return threatTable;
+        }
+
         #endregion
 
     }
