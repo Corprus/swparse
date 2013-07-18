@@ -16,7 +16,7 @@ namespace SWParse.LogStructure
         public LogQuantity Quantity;
         public int Threat;
         public bool Guarded;
-        internal double HealThreadMultiplier;
+        internal double HealThreatMultiplier;
 
         public LogRecord(List<string> record)
         {
@@ -28,7 +28,7 @@ namespace SWParse.LogStructure
             Quantity = new LogQuantity(record[5]);
             Threat = 0;
             Guarded = false;
-            HealThreadMultiplier = 1;
+            HealThreatMultiplier = 1;
             int.TryParse(record[6], out Threat);
         }
     }
