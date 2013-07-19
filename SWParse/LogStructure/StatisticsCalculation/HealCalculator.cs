@@ -125,5 +125,9 @@ namespace SWParse.LogStructure.StatisticsCalculation
         {
 #warning should be implemented to prevent overcalculating;
         }
+
+        protected override void InitProperties()
+        {
+        }
     }
 }

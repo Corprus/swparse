@@ -95,5 +95,9 @@ namespace SWParse.LogStructure.StatisticsCalculation
 
             return text;
         }
+
+        protected override void InitProperties()
+        {
+        }
     }
 }

@@ -6,7 +6,7 @@ using SWParse.LogStructure.StatisticsCalculation;
 
 namespace SWParse.LogStructure
 {
-    internal partial class LogBattle : List<LogRecord>
+    internal class LogBattle : List<LogRecord>
     {
         public LogBattle(string logOwner)
         {
@@ -21,11 +21,11 @@ namespace SWParse.LogStructure
 
         public void Visit(params IBattleLogVisitor[] visitors)
         {
+            Statistics.Calculate();
             foreach (var battleLogVisitor in visitors)
             {
                 battleLogVisitor.Apply(Statistics);
             }
-            
         }
 
         public override string ToString()

@@ -26,33 +26,36 @@ namespace SWParse.LogStructure.StatisticsCalculation
 
         public DateTime Start
         {
-            get { return Enter.When; }
+            get { return (_calculableProperties["Start"] as ICalculable<DateTime>).Value; }
         }
 
         public DateTime End
         {
-            get { return Exit.When; }
+            get { return (_calculableProperties["End"] as ICalculable<DateTime>).Value; }
         }
 
         public TimeSpan Duration
         {
-            get { return End - Start; }
+            get { return (_calculableProperties["Duration"] as ICalculable<TimeSpan>).Value; }
         }
 
         public LogRecord Enter
         {
-            get { return Battle[0]; }
+            get { return (_calculableProperties["Enter"] as ICalculable<LogRecord>).Value; }
         }
 
         public LogRecord Exit
         {
-            get { return Battle[Battle.Count - 1]; }
+            get { return (_calculableProperties["Exit"] as ICalculable<LogRecord>).Value; }
         }
-
 
         public override void Calculate()
         {
-#warning should be implemented to prevent overcalculating;
+            base.Calculate();
+//            Heals.Calculate();
+//            Damage.Calculate();
+//            Threat.Calculate();
+//            DamageTaken.Calculate();
         }
 
         public override string GetLog()
@@ -69,6 +72,15 @@ namespace SWParse.LogStructure.StatisticsCalculation
                     string.Format("HPS: {0:0.##}", Heals.HPS)
                 });
             return text;
+        }
+
+        protected override void InitProperties()
+        {
+            _calculableProperties.Add("Enter", new CalculableProperty<LogRecord>(() => Battle[0]));
+            _calculableProperties.Add("Exit", new CalculableProperty<LogRecord>(() => Battle[Battle.Count - 1]));
+            _calculableProperties.Add("Start", new CalculableProperty<DateTime>(() => Enter.When));
+            _calculableProperties.Add("End", new CalculableProperty<DateTime>(() => Exit.When));
+            _calculableProperties.Add("Duration", new CalculableProperty<TimeSpan>(() => End - Start));
         }
     }
 }

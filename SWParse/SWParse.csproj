@@ -76,6 +76,7 @@
     <Compile Include="LogStructure\LogRecord.cs" />
     <Compile Include="LogStructure\LogSkill.cs" />
     <Compile Include="LogStructure\StatisticsCalculation\BattleCalculator.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\CalculableProperty.cs" />
     <Compile Include="LogStructure\StatisticsCalculation\Calculator.cs" />
     <Compile Include="LogStructure\StatisticsCalculation\DamageCalculator.cs" />
     <Compile Include="LogStructure\StatisticsCalculation\DamageTakenCalculator.cs" />
@@ -104,7 +105,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="LogStructure\LogBattle.Reports.cs" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

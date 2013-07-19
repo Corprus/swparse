@@ -13,6 +13,7 @@ namespace SWParse.LogStructure.StatisticsCalculation
         internal Calculator(LogBattle battle)
         {
             _battle = battle;
+            InitProperties();
         }
 
         protected LogBattle Battle
@@ -20,7 +21,18 @@ namespace SWParse.LogStructure.StatisticsCalculation
             get { return _battle; }
         }
 
-        public abstract void Calculate();
+        protected abstract void InitProperties();
+
+        protected Dictionary<string, ICalculable> _calculableProperties = new Dictionary<string, ICalculable>();
+
+        public virtual void Calculate()
+        {
+            foreach (var property in _calculableProperties.Values)
+            {
+                property.Calculate();
+            }
+        }
+
         public abstract string GetLog();
     }
 }
