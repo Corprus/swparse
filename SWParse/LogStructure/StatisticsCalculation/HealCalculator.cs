@@ -15,91 +15,72 @@ namespace SWParse.LogStructure.StatisticsCalculation
 
         private IEnumerable<LogRecord> HealsGivenRecords
         {
-            get { return Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Effect.Name == LogEffect.HealString); }
+            get { return (_calculableProperties["HealsGivenRecords"] as ICalculable<IEnumerable<LogRecord>>).Value; }
         }
 
         private IEnumerable<LogRecord> CritHealsGivenRecords
         {
-            get { return HealsGivenRecords.Where(rec => rec.Quantity.IsCrit); }
+            get { return (_calculableProperties["CritHealsGivenRecords"] as ICalculable<IEnumerable<LogRecord>>).Value; }
         }
 
         public int HealsGivenCount
         {
-            get { return HealsGivenRecords.Count(); }
+            get { return (_calculableProperties["HealsGivenCount"] as ICalculable<int>).Value; }
         }
 
         public int CritHealsGivenCount
         {
-            get { return CritHealsGivenRecords.Count(); }
+            get { return (_calculableProperties["CritHealsGivenCount"] as ICalculable<int>).Value; }
         }
 
         public double CritHealsPercent
         {
-            get { return HealsGivenCount > 0 ? (double)CritHealsGivenCount / (double)HealsGivenCount : 0; }
+            get { return (_calculableProperties["CritHealsPercent"] as ICalculable<double>).Value; }
         }
 
         public long HealsTaken
         {
-            get
-            {
-                return
-                    Battle.Where(rec => rec.Target.Name == Battle.LogOwner && rec.Effect.Name == LogEffect.HealString)
-                        .Sum(rec => rec.Quantity.Value);
-            }
+            get { return (_calculableProperties["HealsTaken"] as ICalculable<long>).Value; }
         }
 
         public double HPS
         {
-            get { return HealsGiven / Battle.Statistics.Duration.TotalSeconds; }
+            get { return (_calculableProperties["HPS"] as ICalculable<double>).Value; }
         }
 
         public long Overheal
         {
-            get
-            {
-                return
-                    (long)Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Effect.Name == LogEffect.HealString)
-                               .Sum(
-                                   rec =>
-                                   rec.Quantity.Value -
-                                   (rec.Threat * 2 / (rec.HealThreatMultiplier * (rec.Guarded ? 0.75 : 1))));
-            }
+            get { return (_calculableProperties["Overheal"] as ICalculable<long>).Value; }
         }
 
         public long EffectiveHeal
         {
-            get { return HealsGiven - Overheal; }
+            get { return (_calculableProperties["EffectiveHeal"] as ICalculable<long>).Value; }
         }
 
         public double EHPS
         {
-            get { return (HealsGiven - Overheal) / Battle.Statistics.Duration.TotalSeconds; }
+            get { return (_calculableProperties["EHPS"] as ICalculable<double>).Value; }
         }
 
         public double EffectiveHealsPercent
         {
-            get { return HealsGiven != 0 ? (double)EffectiveHeal / (double)HealsGiven : 0; }
+            get { return (_calculableProperties["EffectiveHealsPercent"] as ICalculable<double>).Value; }
         }
 
         public long HealsGiven
         {
-            get { return HealsGivenRecords.Sum(rec => rec.Quantity.Value); }
+            get { return (_calculableProperties["HealsGiven"] as ICalculable<long>).Value; }
         }
 
         public long NormalHeals
         {
-            get
-            {
-                return HealsGivenRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value);
-            }
+            get { return (_calculableProperties["NormalHeals"] as ICalculable<long>).Value; }
         }
 
         public long CritHeals
         {
-            get
-            {
-                return CritHealsGivenRecords.Sum(rec => rec.Quantity.Value);
-            }
+            get { return (_calculableProperties["CritHeals"] as ICalculable<long>).Value; }
         }
 
         public override string GetLog()
@@ -121,13 +102,40 @@ namespace SWParse.LogStructure.StatisticsCalculation
             return text;
         }
 
-        public override void Calculate()
-        {
-#warning should be implemented to prevent overcalculating;
-        }
-
         protected override void InitProperties()
         {
+            _calculableProperties.Add("HealsGivenRecords",
+                new CalculableProperty<IEnumerable<LogRecord>>(() => Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Effect.Name == LogEffect.HealString)));
+            _calculableProperties.Add("CritHealsGivenRecords",
+                new CalculableProperty<IEnumerable<LogRecord>>(() => HealsGivenRecords.Where(rec => rec.Quantity.IsCrit)));
+            _calculableProperties.Add("HealsGivenCount", new CalculableProperty<int>(() => HealsGivenRecords.Count()));
+            _calculableProperties.Add("CritHealsGivenCount", new CalculableProperty<int>(() => CritHealsGivenRecords.Count()));
+            _calculableProperties.Add("CritHealsPercent", 
+                new CalculableProperty<double>(() => HealsGivenCount > 0 ? (double)CritHealsGivenCount / (double)HealsGivenCount : 0));
+            _calculableProperties.Add("HealsTaken",
+                                      new CalculableProperty<long>(
+                                          () =>
+                                          Battle.Where(
+                                              rec =>
+                                              rec.Target.Name == Battle.LogOwner &&
+                                              rec.Effect.Name == LogEffect.HealString)
+                                                .Sum(rec => rec.Quantity.Value)));
+
+            _calculableProperties.Add("HPS", new CalculableProperty<double>(() => HealsGiven / Battle.Statistics.Duration.TotalSeconds));
+            _calculableProperties.Add("Overheal",
+                new CalculableProperty<long>(() =>
+                    (long) HealsGivenRecords.Sum(rec => rec.Quantity.Value - (rec.Threat * 2 / (rec.HealThreatMultiplier * (rec.Guarded ? 0.75 : 1))))));
+            _calculableProperties.Add("EffectiveHeal", new CalculableProperty<long>(() => HealsGiven - Overheal));
+            _calculableProperties.Add("EHPS", 
+                new CalculableProperty<double>(() => (HealsGiven - Overheal) / Battle.Statistics.Duration.TotalSeconds));
+            _calculableProperties.Add("EffectiveHealsPercent", 
+                new CalculableProperty<double>(() => HealsGiven != 0 ? (double)EffectiveHeal / (double)HealsGiven : 0));
+            _calculableProperties.Add("HealsGiven", 
+                new CalculableProperty<long>(() => HealsGivenRecords.Sum(rec => rec.Quantity.Value)));
+            _calculableProperties.Add("NormalHeals", 
+                new CalculableProperty<long>(() => HealsGivenRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value)));
+            _calculableProperties.Add("CritHeals", 
+                new CalculableProperty<long>(() => CritHealsGivenRecords.Sum(rec => rec.Quantity.Value)));
         }
     }
 }

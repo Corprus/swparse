@@ -7,7 +7,7 @@ namespace SWParse.LogBattleVisitors
     {
         public void Apply(BattleCalculator logBattle)
         {
-            Summary = logBattle.GetLog();
+            Summary = logBattle.Heals.GetLog();
         }
 
         public string Summary { get; private set; }
