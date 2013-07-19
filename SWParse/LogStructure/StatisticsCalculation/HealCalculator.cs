@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Documents;
 
 namespace SWParse.LogStructure.StatisticsCalculation
 {
@@ -21,6 +23,11 @@ namespace SWParse.LogStructure.StatisticsCalculation
         private IEnumerable<LogRecord> CritHealsGivenRecords
         {
             get { return (_calculableProperties["CritHealsGivenRecords"] as ICalculable<IEnumerable<LogRecord>>).Value; }
+        }
+
+        private IEnumerable<IGrouping<string, LogRecord>> HealRecordsBySkill
+        {
+            get { return (_calculableProperties["HealRecordsBySkill"] as ICalculable<IEnumerable<IGrouping<string, LogRecord>>>).Value; }
         }
 
         public int HealsGivenCount
@@ -102,6 +109,48 @@ namespace SWParse.LogStructure.StatisticsCalculation
             return text;
         }
 
+        public Table GetHealTable()
+        {
+            var threatTable = new Table();
+            threatTable.CellSpacing = 0;
+            threatTable.Columns.Add(new TableColumn());
+            threatTable.Columns.Add(new TableColumn());
+            threatTable.Columns.Add(new TableColumn());
+            threatTable.Columns.Add(new TableColumn());
+            var headerGroup = new TableRowGroup();
+            headerGroup.Rows.Add(new TableRow());
+            headerGroup.Rows[0].FontWeight = FontWeights.Bold;
+            var headerRow = headerGroup.Rows[0];
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Skill"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Count"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Heal"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Total Heal %"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Overheal"))));
+            headerRow.Cells.Add(new TableCell(new Paragraph(new Run("Overheal %"))));
+            threatTable.RowGroups.Add(headerGroup);
+
+            var rowGroup = new TableRowGroup();
+            var totalHeal = HealsGiven;
+            var totalOverheal = Overheal;
+            foreach (var item in HealRecordsBySkill.OrderByDescending(records => records.Sum(record => record.CalculateOverheal())))
+            {
+                var row = new TableRow();
+
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Key))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Count().ToString()))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Sum(record => record.Quantity.Value).ToString()))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Sum(record => (double)record.Quantity.Value / totalHeal).ToString("0.##%")))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(item.Sum(record => record.CalculateOverheal()).ToString()))));
+                row.Cells.Add(new TableCell(new Paragraph(new Run(
+                    (item.Sum(record => (double)record.CalculateOverheal())/item.Sum(record => record.Quantity.Value)).ToString("0.##%")))));
+                rowGroup.Rows.Add(row);
+            }
+            rowGroup.Rows.Add(new TableRow());
+            threatTable.RowGroups.Add(rowGroup);
+            return threatTable;
+        }
+
+
         protected override void InitProperties()
         {
             _calculableProperties.Add("HealsGivenRecords",
@@ -124,8 +173,7 @@ namespace SWParse.LogStructure.StatisticsCalculation
 
             _calculableProperties.Add("HPS", new CalculableProperty<double>(() => HealsGiven / Battle.Statistics.Duration.TotalSeconds));
             _calculableProperties.Add("Overheal",
-                new CalculableProperty<int>(() =>
-                    (int) HealsGivenRecords.Sum(rec => rec.Quantity.Value - (rec.Threat * 2 / (rec.HealThreatMultiplier * (rec.Guarded ? 0.75 : 1))))));
+                new CalculableProperty<int>(() => HealsGivenRecords.Sum(rec => rec.CalculateOverheal())));
             _calculableProperties.Add("EffectiveHeal", new CalculableProperty<int>(() => HealsGiven - Overheal));
             _calculableProperties.Add("EHPS", 
                 new CalculableProperty<double>(() => (HealsGiven - Overheal) / Battle.Statistics.Duration.TotalSeconds));
@@ -137,6 +185,8 @@ namespace SWParse.LogStructure.StatisticsCalculation
                 new CalculableProperty<int>(() => HealsGivenRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value)));
             _calculableProperties.Add("CritHeals", 
                 new CalculableProperty<int>(() => CritHealsGivenRecords.Sum(rec => rec.Quantity.Value)));
+            _calculableProperties.Add("HealRecordsBySkill",
+                new CalculableProperty<IEnumerable<IGrouping<string, LogRecord>>>(() => HealsGivenRecords.ToLookup(record => record.Skill.Name)));
         }
     }
 }

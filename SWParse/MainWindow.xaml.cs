@@ -80,6 +80,7 @@ namespace SWParse
             LogText.IsEnabled = true;
             LogText.Document = new FlowDocument(new Paragraph(new Run(summaryVisitor.Summary)));
             LogHeal.Document = new FlowDocument(new Paragraph(new Run(healVisitor.Summary)));
+            LogHeal.Document.Blocks.Add(healVisitor.Table);
             LogDamageDealt.Document = new FlowDocument(new Paragraph(new Run(damageVisitor.Summary)));
             LogDamageTaken.Document = new FlowDocument(new Paragraph(new Run(battle.Statistics.DamageTaken.GetLog())));
             LogThreat.Document = new FlowDocument(new Paragraph(new Run(battle.Statistics.Threat.GetLog())));

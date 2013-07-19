@@ -81,6 +81,7 @@
     <Compile Include="LogStructure\StatisticsCalculation\DamageCalculator.cs" />
     <Compile Include="LogStructure\StatisticsCalculation\DamageTakenCalculator.cs" />
     <Compile Include="LogStructure\StatisticsCalculation\HealCalculator.cs" />
+    <Compile Include="LogStructure\StatisticsCalculation\StatisticsExtensions.cs" />
     <Compile Include="LogStructure\StatisticsCalculation\ThreatCalculator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
