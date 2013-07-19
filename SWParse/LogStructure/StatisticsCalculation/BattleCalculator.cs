@@ -49,15 +49,6 @@ namespace SWParse.LogStructure.StatisticsCalculation
             get { return (_calculableProperties["Exit"] as ICalculable<LogRecord>).Value; }
         }
 
-        public override void Calculate()
-        {
-            base.Calculate();
-//            Heals.Calculate();
-//            Damage.Calculate();
-//            Threat.Calculate();
-//            DamageTaken.Calculate();
-        }
-
         public override string GetLog()
         {
             var text = string.Join(Environment.NewLine, new[]
