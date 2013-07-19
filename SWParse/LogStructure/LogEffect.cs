@@ -26,9 +26,9 @@ namespace SWParse.LogStructure
         public const string GuardString = "Guard";
 
         public LogEffectType Type;
-        public long? TypeId;
+        public int? TypeId;
         public string Name;
-        public long? EffectId;
+        public int? EffectId;
         public LogEffect(string logString)
         {
             Type = LogEffectType.Event;
@@ -45,14 +45,14 @@ namespace SWParse.LogStructure
                     case EventString: Type = LogEffectType.Event; break;
                     default: Type = LogEffectType.Event; break;
                 }
-                long typeId;
-                if (long.TryParse(parsedEffect[1], out typeId))
+                int typeId;
+                if (int.TryParse(parsedEffect[1], out typeId))
                 {
                     TypeId = typeId;
                 }
                 Name = parsedEffect[2];
-                long effectId;
-                if (long.TryParse(parsedEffect[3], out effectId))
+                int effectId;
+                if (int.TryParse(parsedEffect[3], out effectId))
                 {
                     EffectId = effectId;
                 }

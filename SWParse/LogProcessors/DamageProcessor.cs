@@ -6,7 +6,7 @@ namespace SWParse.LogProcessors
 {
     public class AttackEntry
     {
-        public long TotalDamage;
+        public int TotalDamage;
         public int TotalHits;
         public int CriticalHits;
     }
@@ -15,8 +15,8 @@ namespace SWParse.LogProcessors
     {
         readonly IDictionary<string, AttackEntry> _attacks = new Dictionary<string, AttackEntry>();
 
-        private long _totalDamage;
-        private long _critDamage;
+        private int _totalDamage;
+        private int _critDamage;
 
         public double Dps { get; private set; }
 

@@ -10,8 +10,8 @@ namespace SWParse.LogStructure
     {
         public string Name;
         public bool IsPlayer;
-        public long? Id1;
-        public long? Id2;
+        public int? Id1;
+        public int? Id2;
         public LogPerson(string logString)
         {
             Name = logString;
@@ -29,13 +29,13 @@ namespace SWParse.LogStructure
                 var parsedName = LogParser.ParseString(@"^(?<name>.*?) \{(?<id1>\d*?)\}:(?<id2>\d*?)$", logString);
                 Name = parsedName[0];
 
-                long id1;
-                if (long.TryParse(parsedName[1], out id1))
+                int id1;
+                if (int.TryParse(parsedName[1], out id1))
                 {
                     Id1 = id1;
                 }
-                long id2;
-                if (long.TryParse(parsedName[1], out id2))
+                int id2;
+                if (int.TryParse(parsedName[1], out id2))
                 {
                     Id2 = id2;
                 }

@@ -31,9 +31,9 @@ namespace SWParse.LogStructure.StatisticsCalculation
             get { return (_calculableProperties["ThreatActionsCount"] as ICalculable<int>).Value; }
         }
 
-        public long TotalThreat
+        public int TotalThreat
         {
-            get { return (_calculableProperties["TotalThreat"] as ICalculable<long>).Value; }
+            get { return (_calculableProperties["TotalThreat"] as ICalculable<int>).Value; }
         }
 
         public Dictionary<string, int> ThreatBySkill
@@ -90,11 +90,12 @@ namespace SWParse.LogStructure.StatisticsCalculation
         protected override void InitProperties()
         {
             _calculableProperties.Add("ThreatRecords", 
-                new CalculableProperty<IEnumerable<LogRecord>>(() => Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Threat != 0)));
+                new CalculableProperty<IEnumerable<LogRecord>>(() => 
+                    Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Threat != 0).ToList()));
             _calculableProperties.Add("ThreatRecordsBySkill", 
                 new CalculableProperty<IEnumerable<IGrouping<string, LogRecord>>>(() => ThreatRecords.ToLookup(record => record.Skill.Name)));
             _calculableProperties.Add("ThreatActionsCount", new CalculableProperty<int>(() => ThreatRecords.Count()));
-            _calculableProperties.Add("TotalThreat", new CalculableProperty<long>(() => ThreatRecords.Sum(rec => rec.Threat)));
+            _calculableProperties.Add("TotalThreat", new CalculableProperty<int>(() => ThreatRecords.Sum(rec => rec.Threat)));
             _calculableProperties.Add("ThreatBySkill", 
                 new CalculableProperty<Dictionary<string, int>>(() => ThreatRecordsBySkill.ToDictionary(records => records.Key, records => records.Sum(record => record.Threat))));
         }

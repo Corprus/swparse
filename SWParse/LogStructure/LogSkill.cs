@@ -3,7 +3,7 @@
     public struct LogSkill
     {
         public string Name;
-        public long? Id;
+        public int? Id;
         public LogSkill(string logString)
         {
             Name = string.Empty;
@@ -12,8 +12,8 @@
             {
                 var parsedName = LogParser.ParseString(@"^(?<name>.*?) \{(?<id1>\d*?)\}$", logString);
                 Name = parsedName[0];
-                long id;
-                if (long.TryParse(parsedName[1], out id))
+                int id;
+                if (int.TryParse(parsedName[1], out id))
                 {
                     Id = id;
                 }

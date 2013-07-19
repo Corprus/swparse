@@ -38,9 +38,9 @@ namespace SWParse.LogStructure.StatisticsCalculation
             get { return (_calculableProperties["CritHealsPercent"] as ICalculable<double>).Value; }
         }
 
-        public long HealsTaken
+        public int HealsTaken
         {
-            get { return (_calculableProperties["HealsTaken"] as ICalculable<long>).Value; }
+            get { return (_calculableProperties["HealsTaken"] as ICalculable<int>).Value; }
         }
 
         public double HPS
@@ -48,14 +48,14 @@ namespace SWParse.LogStructure.StatisticsCalculation
             get { return (_calculableProperties["HPS"] as ICalculable<double>).Value; }
         }
 
-        public long Overheal
+        public int Overheal
         {
-            get { return (_calculableProperties["Overheal"] as ICalculable<long>).Value; }
+            get { return (_calculableProperties["Overheal"] as ICalculable<int>).Value; }
         }
 
-        public long EffectiveHeal
+        public int EffectiveHeal
         {
-            get { return (_calculableProperties["EffectiveHeal"] as ICalculable<long>).Value; }
+            get { return (_calculableProperties["EffectiveHeal"] as ICalculable<int>).Value; }
         }
 
         public double EHPS
@@ -68,19 +68,19 @@ namespace SWParse.LogStructure.StatisticsCalculation
             get { return (_calculableProperties["EffectiveHealsPercent"] as ICalculable<double>).Value; }
         }
 
-        public long HealsGiven
+        public int HealsGiven
         {
-            get { return (_calculableProperties["HealsGiven"] as ICalculable<long>).Value; }
+            get { return (_calculableProperties["HealsGiven"] as ICalculable<int>).Value; }
         }
 
-        public long NormalHeals
+        public int NormalHeals
         {
-            get { return (_calculableProperties["NormalHeals"] as ICalculable<long>).Value; }
+            get { return (_calculableProperties["NormalHeals"] as ICalculable<int>).Value; }
         }
 
-        public long CritHeals
+        public int CritHeals
         {
-            get { return (_calculableProperties["CritHeals"] as ICalculable<long>).Value; }
+            get { return (_calculableProperties["CritHeals"] as ICalculable<int>).Value; }
         }
 
         public override string GetLog()
@@ -105,7 +105,8 @@ namespace SWParse.LogStructure.StatisticsCalculation
         protected override void InitProperties()
         {
             _calculableProperties.Add("HealsGivenRecords",
-                new CalculableProperty<IEnumerable<LogRecord>>(() => Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Effect.Name == LogEffect.HealString)));
+                new CalculableProperty<IEnumerable<LogRecord>>(() => 
+                    Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Effect.Name == LogEffect.HealString).ToList()));
             _calculableProperties.Add("CritHealsGivenRecords",
                 new CalculableProperty<IEnumerable<LogRecord>>(() => HealsGivenRecords.Where(rec => rec.Quantity.IsCrit)));
             _calculableProperties.Add("HealsGivenCount", new CalculableProperty<int>(() => HealsGivenRecords.Count()));
@@ -113,7 +114,7 @@ namespace SWParse.LogStructure.StatisticsCalculation
             _calculableProperties.Add("CritHealsPercent", 
                 new CalculableProperty<double>(() => HealsGivenCount > 0 ? (double)CritHealsGivenCount / (double)HealsGivenCount : 0));
             _calculableProperties.Add("HealsTaken",
-                                      new CalculableProperty<long>(
+                                      new CalculableProperty<int>(
                                           () =>
                                           Battle.Where(
                                               rec =>
@@ -123,19 +124,19 @@ namespace SWParse.LogStructure.StatisticsCalculation
 
             _calculableProperties.Add("HPS", new CalculableProperty<double>(() => HealsGiven / Battle.Statistics.Duration.TotalSeconds));
             _calculableProperties.Add("Overheal",
-                new CalculableProperty<long>(() =>
-                    (long) HealsGivenRecords.Sum(rec => rec.Quantity.Value - (rec.Threat * 2 / (rec.HealThreatMultiplier * (rec.Guarded ? 0.75 : 1))))));
-            _calculableProperties.Add("EffectiveHeal", new CalculableProperty<long>(() => HealsGiven - Overheal));
+                new CalculableProperty<int>(() =>
+                    (int) HealsGivenRecords.Sum(rec => rec.Quantity.Value - (rec.Threat * 2 / (rec.HealThreatMultiplier * (rec.Guarded ? 0.75 : 1))))));
+            _calculableProperties.Add("EffectiveHeal", new CalculableProperty<int>(() => HealsGiven - Overheal));
             _calculableProperties.Add("EHPS", 
                 new CalculableProperty<double>(() => (HealsGiven - Overheal) / Battle.Statistics.Duration.TotalSeconds));
             _calculableProperties.Add("EffectiveHealsPercent", 
                 new CalculableProperty<double>(() => HealsGiven != 0 ? (double)EffectiveHeal / (double)HealsGiven : 0));
             _calculableProperties.Add("HealsGiven", 
-                new CalculableProperty<long>(() => HealsGivenRecords.Sum(rec => rec.Quantity.Value)));
+                new CalculableProperty<int>(() => HealsGivenRecords.Sum(rec => rec.Quantity.Value)));
             _calculableProperties.Add("NormalHeals", 
-                new CalculableProperty<long>(() => HealsGivenRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value)));
+                new CalculableProperty<int>(() => HealsGivenRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value)));
             _calculableProperties.Add("CritHeals", 
-                new CalculableProperty<long>(() => CritHealsGivenRecords.Sum(rec => rec.Quantity.Value)));
+                new CalculableProperty<int>(() => CritHealsGivenRecords.Sum(rec => rec.Quantity.Value)));
         }
     }
 }

@@ -15,58 +15,47 @@ namespace SWParse.LogStructure.StatisticsCalculation
 
         private IEnumerable<LogRecord> DamageDealtRecords
         {
-            get { return Battle.Where(rec => rec.Source.Name == Battle.LogOwner && rec.Target.Name != Battle.LogOwner && rec.Effect.Name == LogEffect.DamageString); }
+            get { return (_calculableProperties["DamageDealtRecords"] as ICalculable<IEnumerable<LogRecord>>).Value; }
         }
 
         private IEnumerable<LogRecord> CritDamageDealtRecords
         {
-            get { return DamageDealtRecords.Where(rec => rec.Quantity.IsCrit); }
+            get { return (_calculableProperties["CritDamageDealtRecords"] as ICalculable<IEnumerable<LogRecord>>).Value; }
         }
 
         public int HitsDealt
         {
-            get { return DamageDealtRecords.Count(); }
+            get { return (_calculableProperties["HitsDealt"] as ICalculable<int>).Value; }
         }
 
-        public long Damage
+        public int Damage
         {
-            get { return DamageDealtRecords.Sum(rec => rec.Quantity.Value); }
+            get { return (_calculableProperties["Damage"] as ICalculable<int>).Value; }
         }
 
-        public long CritDamage
+        public int CritDamage
         {
-            get
-            {
-                return CritDamageDealtRecords.Sum(rec => rec.Quantity.Value);
-            }
+            get { return (_calculableProperties["CritDamage"] as ICalculable<int>).Value; }
         }
 
         public int CritHitsDealt
         {
-            get { return CritDamageDealtRecords.Count(); }
+            get { return (_calculableProperties["CritHitsDealt"] as ICalculable<int>).Value; }
         }
 
-        public long NormalDamage
+        public int NormalDamage
         {
-            get
-            {
-                return DamageDealtRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value);
-            }
+            get { return (_calculableProperties["NormalDamage"] as ICalculable<int>).Value; }
         }
 
         public double CritHitsPercent
         {
-            get { return (double)HitsDealt > 0 ? (double)CritHitsDealt / (double)HitsDealt : 0; }
+            get { return (_calculableProperties["CritHitsPercent"] as ICalculable<double>).Value; }
         }
 
         public double DPS
         {
-            get { return Damage / Battle.Statistics.Duration.TotalSeconds; }
-        }
-
-        public override void Calculate()
-        {
-#warning should be implemented to prevent overcalculating;
+            get { return (_calculableProperties["DPS"] as ICalculable<double>).Value; }
         }
 
         public override string GetLog()
@@ -86,6 +75,28 @@ namespace SWParse.LogStructure.StatisticsCalculation
 
         protected override void InitProperties()
         {
+            _calculableProperties.Add("DamageDealtRecords",
+                new CalculableProperty<IEnumerable<LogRecord>>(() =>
+                    Battle.Where(rec =>
+                             rec.Source.Name == Battle.LogOwner
+                             && rec.Target.Name != Battle.LogOwner
+                             && rec.Effect.Name == LogEffect.DamageString)
+                    .ToList()));
+            _calculableProperties.Add("CritDamageDealtRecords", 
+                new CalculableProperty<IEnumerable<LogRecord>>(() => DamageDealtRecords.Where(rec => rec.Quantity.IsCrit).ToList()));
+            _calculableProperties.Add("HitsDealt", new CalculableProperty<int>(() => DamageDealtRecords.Count()));
+            _calculableProperties.Add("Damage",
+                new CalculableProperty<int>(() => DamageDealtRecords.Sum(rec => rec.Quantity.Value)));
+            _calculableProperties.Add("CritDamage", 
+                new CalculableProperty<int>(() => CritDamageDealtRecords.Sum(rec => rec.Quantity.Value)));
+            _calculableProperties.Add("CritHitsDealt",
+                new CalculableProperty<int>(() => CritDamageDealtRecords.Count()));
+            _calculableProperties.Add("NormalDamage",
+                new CalculableProperty<int>(() => DamageDealtRecords.Where(rec => !rec.Quantity.IsCrit).Sum(rec => rec.Quantity.Value)));
+            _calculableProperties.Add("CritHitsPercent",
+                new CalculableProperty<double>(() => (double)HitsDealt > 0 ? (double)CritHitsDealt / (double)HitsDealt : 0));
+            _calculableProperties.Add("DPS",
+                new CalculableProperty<double>(() => Damage / Battle.Statistics.Duration.TotalSeconds));
         }
     }
 }

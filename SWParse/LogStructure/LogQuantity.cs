@@ -11,7 +11,7 @@ namespace SWParse.LogStructure
         public int Value;
         public string Type;
         public bool IsCrit;
-        public long? Id;
+        public int? Id;
         public LogQuantity(string logString)
         {
             const char CritSymbol = '*';
@@ -37,8 +37,8 @@ namespace SWParse.LogStructure
                     IsCrit = parsedQuantity[1].EndsWith(CritSymbol.ToString());
                     int.TryParse(parsedQuantity[1].TrimEnd(CritSymbol), out Value);
                     Type = parsedQuantity[0];
-                    long id;
-                    if (long.TryParse(parsedQuantity[2], out id))
+                    int id;
+                    if (int.TryParse(parsedQuantity[2], out id))
                     {
                         Id = id;
                     }
