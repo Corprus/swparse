@@ -85,7 +85,6 @@ namespace SWParse
             LogDamageTaken.Document = new FlowDocument(new Paragraph(new Run(battle.Statistics.DamageTaken.GetLog())));
             LogThreat.Document = new FlowDocument(new Paragraph(new Run(battle.Statistics.Threat.GetLog())));
             LogThreat.Document.Blocks.Add(battle.Statistics.Threat.GetThreatTable());
-
         }
     }
 }

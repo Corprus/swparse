@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using SWParse.LogStructure;
 
 namespace SWParse
@@ -13,7 +14,7 @@ namespace SWParse
         public static List<LogRecord> Parse(string logPath)
         {
             string[] log  = File.ReadAllLines(logPath);
-            return log.Select(logString => ParseString(@"^\[(?<date>.*?)\] \[(?<from>.*?)\] \[(?<to>.*?)\] \[(?<skill>.*?)\] \[(?<effect>.*?)\] \((?<quantity>.*?)\)\D*(?<threat>\d+)?.*$", logString)).Select(parseResult => new LogRecord(parseResult)).ToList();
+            return log.AsParallel().AsOrdered().Select(logString => ParseString(@"^\[(?<date>.*?)\] \[(?<from>.*?)\] \[(?<to>.*?)\] \[(?<skill>.*?)\] \[(?<effect>.*?)\] \((?<quantity>.*?)\)\D*(?<threat>\d+)?.*$", logString)).Select(parseResult => new LogRecord(parseResult)).ToList();
         }        
 
         public static List<LogBattle> DivideIntoBattlesAndApplyGuards(List<LogRecord> log)
@@ -23,8 +24,9 @@ namespace SWParse
             LogBattle currentBattle = null;
             bool guarded = false;
             IEnumerable<LogRecord> heals = log.Where(rec => rec.Source.Name == logOwner && rec.Effect.Name == LogEffect.HealString);
-            double healMultiplier = heals.Any()
-                                        ? heals.Max(rec =>
+            var healRecords = heals as IList<LogRecord> ?? heals.ToList();
+            double healMultiplier = healRecords.Any()
+                                        ? healRecords.Max(rec =>
                                             {
                                                 var d = ((double) rec.Threat*2/(rec.Guarded ? 0.75 : 1))/
                                                         rec.Quantity.Value;
@@ -32,20 +34,21 @@ namespace SWParse
                                             })
                                         : 1;
             if (healMultiplier == 0) healMultiplier = 1;
-            for (var i=0; i < log.Count; i++)            
+
+            foreach (var record in log)
             {
-                var record = log[i];
                 switch (record.Effect.Name)
                 {
                     case LogEffect.GuardString:
                         {
-                            if (record.Effect.Type == LogEffectType.ApplyEffect)
+                            switch (record.Effect.Type)
                             {
-                                guarded = true;
-                            }
-                            if (record.Effect.Type == LogEffectType.RemoveEffect)
-                            {
-                                guarded = false;
+                                case LogEffectType.ApplyEffect:
+                                    guarded = true;
+                                    break;
+                                case LogEffectType.RemoveEffect:
+                                    guarded = false;
+                                    break;
                             }
                         }
                         break;

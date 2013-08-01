@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using SWParse.LogBattleVisitors;
 using SWParse.LogStructure.StatisticsCalculation;
 
@@ -22,10 +23,7 @@ namespace SWParse.LogStructure
         public void Visit(params IBattleLogVisitor[] visitors)
         {
             Statistics.Calculate();
-            foreach (var battleLogVisitor in visitors)
-            {
-                battleLogVisitor.Apply(Statistics);
-            }
+            Parallel.ForEach(visitors, visitor => visitor.Apply(Statistics));
         }
 
         public override string ToString()
